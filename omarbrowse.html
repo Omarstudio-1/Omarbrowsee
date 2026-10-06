@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omar Browse</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, #5424a8 0, transparent 35%),
+        radial-gradient(circle at bottom left, #123d91 0, transparent 35%),
+        #080b16;
+      color: white;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+    }
+
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080b16;
+      transition: .5s;
+    }
+
+    .splash.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .logo {
+      width: 85px;
+      height: 85px;
+      display: grid;
+      place-items: center;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #1677ff, #9b42ff);
+      font-size: 32px;
+      font-weight: 800;
+      box-shadow: 0 0 45px #6b35ff66;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ffffff12;
+      background: #080b16cc;
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #1877ff, #9848ff);
+    }
+
+    .menu-btn {
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      color: white;
+      background: #ffffff0d;
+      font-size: 23px;
+    }
+
+    main {
+      width: min(100% - 28px, 850px);
+      margin: auto;
+      padding: 35px 0 100px;
+    }
+
+    .page {
+      display: none;
+      animation: appear .3s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .hero {
+      text-align: center;
+      padding: 25px 0 30px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 9vw, 58px);
+      font-weight: 800;
+      background: linear-gradient(90deg, #39a7ff, #b75aff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: #aab3cb;
+      margin-top: 5px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      background: #ffffff0b;
+      border: 1px solid #ffffff16;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px #0005;
+    }
+
+    .search-box input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: white;
+      padding: 12px;
+    }
+
+    .search-box button {
+      width: 48px;
+      border-radius: 15px;
+      color: white;
+      background: linear-gradient(135deg, #1677ff, #8442ff);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .card {
+      padding: 20px;
+      border: 1px solid #ffffff12;
+      border-radius: 22px;
+      background: #ffffff09;
+      box-shadow: 0 12px 35px #0003;
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #7e5cff55;
+    }
+
+    .card-icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+    }
+
+    .card p {
+      color: #8f99b4;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+      font-size: 27px;
+    }
+
+    .section-title p {
+      color: #8f99b4;
+    }
+
+    .panel {
+      padding: 18px;
+      border: 1px solid #ffffff12;
+      background: #ffffff09;
+      border-radius: 20px;
+      margin-bottom: 15px;
+    }
+
+    .panel input,
+    .panel textarea,
+    select {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 10px;
+      color: white;
+      background: #080b16;
+      border: 1px solid #ffffff18;
+      border-radius: 13px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .primary {
+      padding: 12px 18px;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(135deg, #1878ff, #8843ff);
+    }
+
+    .secondary {
+      padding: 12px 18px;
+      border-radius: 13px;
+      color: white;
+      background: #ffffff12;
+    }
+
+    .engines {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      margin: 12px 0;
+    }
+
+    .engine {
+      padding: 11px;
+      color: #cbd2e7;
+      border: 1px solid #ffffff12;
+      border-radius: 13px;
+      background: #ffffff08;
+    }
+
+    .engine.active {
+      background: #326dff33;
+      border-color: #4385ff;
+    }
+
+    .chat {
+      height: 430px;
+      overflow-y: auto;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 17px;
+      background: #050711;
+      border: 1px solid #ffffff0e;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 11px 14px;
+      margin: 8px 0;
+      border-radius: 15px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .user-message {
+      margin-right: auto;
+      background: #315fe9;
+    }
+
+    .ai-message {
+      margin-left: auto;
+      background: #ffffff10;
+      color: #d7dcef;
+    }
+
+    .app-item,
+    .post,
+    .suggestion {
+      padding: 16px;
+      margin-bottom: 10px;
+      border-radius: 17px;
+      background: #ffffff08;
+      border: 1px solid #ffffff10;
+    }
+
+    .app-item h3,
+    .post h3 {
+      margin-bottom: 5px;
+    }
+
+    .muted {
+      color: #8993ad;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -310px;
+      width: 290px;
+      height: 100vh;
+      z-index: 1000;
+      padding: 25px 18px;
+      background: #0b0f1d;
+      border-left: 1px solid #ffffff15;
+      box-shadow: -15px 0 45px #0008;
+      transition: .3s;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .close {
+      float: left;
+      background: #ffffff0d;
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+    }
+
+    .side-links {
+      clear: both;
+      padding-top: 35px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .side-links button {
+      text-align: right;
+      padding: 14px;
+      border-radius: 13px;
+      color: #d9def0;
+      background: transparent;
+    }
+
+    .side-links button:hover {
+      background: #ffffff0b;
+    }
+
+    .owner {
+      display: none;
+    }
+
+    .owner.show {
+      display: block;
+    }
+
+    .price {
+      font-size: 27px;
+      font-weight: 800;
+      margin: 8px 0;
+    }
+
+    .plan {
+      padding: 20px;
+      border: 1px solid #ffffff12;
+      background: #ffffff08;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .gold {
+      border-color: #ffd15c55;
+    }
+
+    .platinum {
+      border-color: #b8d8ff55;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%, 100px);
+      z-index: 99999;
+      padding: 12px 18px;
+      border-radius: 13px;
+      background: #151b2d;
+      border: 1px solid #ffffff18;
+      box-shadow: 0 12px 35px #0008;
+      transition: .3s;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 480px) {
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      main {
+        width: min(100% - 20px, 850px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="splash" id="splash">
+  <div>
+    <div class="logo">OB</div>
+  </div>
+</div>
+
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="brand-logo">OB</div>
+    <span>Omar Browse</span>
+  </div>
+
+  <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <button class="close" onclick="toggleSidebar()">×</button>
+
+  <div class="side-links">
+    <button onclick="go('home')">🏠 الرئيسية</button>
+    <button onclick="go('search')">🔎 البحث</button>
+    <button onclick="go('ai')">🤖 الذكاء الاصطناعي</button>
+    <button onclick="go('apps')">🎮 ألعابي / تطبيقاتي</button>
+    <button onclick="go('posts')">📢 المنشورات</button>
+    <button onclick="go('suggestions')">💡 الاقتراحات</button>
+    <button onclick="go('subscribe')">💎 الاشتراك</button>
+    <button onclick="go('support')">🛟 الدعم</button>
+  </div>
+</aside>
+
+<main>
+
+<section class="page active" id="home">
+  <div class="hero">
+    <h1>Omar Browse</h1>
+    <p>متصفحك العربي بشكل مختلف</p>
+  </div>
+
+  <div class="search-box">
+    <input id="homeSearch" placeholder="ابحث عن أي حاجة...">
+    <button onclick="homeSearch()">⌕</button>
+  </div>
+
+  <div class="cards">
+    <div class="card" onclick="go('search')">
+      <div class="card-icon">🔎</div>
+      <h3>البحث</h3>
+      <p>Google و Bing و YouTube وغيرها</p>
+    </div>
+
+    <div class="card" onclick="go('ai')">
+      <div class="card-icon">🤖</div>
+      <h3>AI Chat</h3>
+      <p>اسأل الذكاء الاصطناعي</p>
+    </div>
+
+    <div class="card" onclick="go('apps')">
+      <div class="card-icon">🎮</div>
+      <h3>ألعابي</h3>
+      <p>العاب وتطبيقات Omar</p>
+    </div>
+
+    <div class="card" onclick="go('subscribe')">
+      <div class="card-icon">💎</div>
+      <h3>الاشتراك</h3>
+      <p>خطط ومميزات إضافية</p>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="search">
+  <div class="section-title">
+    <h2>🔎 البحث</h2>
+    <p>اختار محرك البحث واكتب اللي عايزه</p>
+  </div>
+
+  <div class="panel">
+    <input id="searchInput" placeholder="اكتب بحثك هنا...">
+
+    <div class="engines">
+      <button class="engine active" onclick="setEngine('google',this)">Google</button>
+      <button class="engine" onclick="setEngine('bing',this)">Bing</button>
+      <button class="engine" onclick="setEngine('youtube',this)">YouTube</button>
+      <button class="engine" onclick="setEngine('duck',this)">DuckDuckGo</button>
+    </div>
+
+    <button class="primary" onclick="searchWeb()">بحث الآن 🔎</button>
+  </div>
+</section>
+
+<section class="page" id="ai">
+  <div class="section-title">
+    <h2>🤖 Omar AI</h2>
+    <p>مساعد ذكي داخل Omar Browse</p>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="message ai-message">
+      أهلاً! أنا Omar AI. اكتب رسالتك.
+    </div>
+  </div>
+
+  <div class="search-box">
+    <input id="chatInput" placeholder="اكتب رسالتك...">
+    <button onclick="sendChat()">➤</button>
+  </div>
+
+  <p class="muted" style="margin-top:10px">
+    وضع المعاينة يعمل محلياً. ربط API حقيقي يحتاج مفتاح API وBackend.
+  </p>
+</section>
+
+<section class="page" id="apps">
+  <div class="section-title">
+    <h2>🎮 ألعابي / تطبيقاتي</h2>
+    <p>التطبيقات والألعاب المنشورة</p>
+  </div>
+
+  <div class="panel owner" id="ownerApps">
+    <h3>👑 Owner Panel</h3>
+
+    <input id="appName" placeholder="اسم اللعبة / التطبيق">
+    <textarea id="appDesc" placeholder="الوصف"></textarea>
+    <input id="appUrl" placeholder="رابط التحميل">
+
+    <button class="primary" onclick="addApp()">إضافة</button>
+  </div>
+
+  <div id="appsList"></div>
+</section>
+
+<section class="page" id="posts">
+  <div class="section-title">
+    <h2>📢 المنشورات</h2>
+    <p>آخر الأخبار والمنشورات</p>
+  </div>
+
+  <div class="panel owner" id="ownerPosts">
+    <input id="postTitle" placeholder="عنوان المنشور">
+    <textarea id="postText" placeholder="اكتب المنشور..."></textarea>
+    <button class="primary" onclick="addPost()">نشر</button>
+  </div>
+
+  <div id="postsList"></div>
+</section>
+
+<section class="page" id="suggestions">
+  <div class="section-title">
+    <h2>💡 الاقتراحات</h2>
+    <p>ساعد في تطوير Omar Browse</p>
+  </div>
+
+  <div class="panel">
+    <input id="suggestionName" placeholder="اسمك">
+    <textarea id="suggestionText" placeholder="اكتب اقتراحك..."></textarea>
+    <button class="primary" onclick="addSuggestion()">إرسال الاقتراح</button>
+  </div>
+
+  <div id="suggestionsList"></div>
+</section>
+
+<section class="page" id="subscribe">
+  <div class="section-title">
+    <h2>💎 الاشتراك</h2>
+    <p>اختار الخطة المناسبة</p>
+  </div>
+
+  <div class="plan">
+    <h3>أساسي</h3>
+    <div class="price">مجاني</div>
+    <p class="muted">المميزات الأساسية</p>
+    <button class="secondary">الخطة الحالية</button>
+  </div>
+
+  <div class="plan gold">
+    <h3>🥇 ذهبي</h3>
+    <div class="price">50 ج.م / شهر</div>
+    <p class="muted">مميزات إضافية</p>
+    <button class="primary" onclick="subscribe('ذهبي',50)">اشترك</button>
+  </div>
+
+  <div class="plan platinum">
+    <h3>💎 بلاتيني</h3>
+    <div class="price">100 ج.م / شهر</div>
+    <p class="muted">كل المميزات</p>
+    <button class="primary" onclick="subscribe('بلاتيني',100)">اشترك</button>
+  </div>
+
+  <div class="panel">
+    <b>Vodafone Cash</b>
+    <p class="muted">01038185501</p>
+  </div>
+</section>
+
+<section class="page" id="support">
+  <div class="section-title">
+    <h2>🛟 الدعم</h2>
+    <p>تواصل مع صاحب Omar Browse</p>
+  </div>
+
+  <div class="panel">
+    <h3>Vodafone Cash</h3>
+    <p class="price">01038185501</p>
+
+    <button class="primary" onclick="openWhatsApp('مرحباً، أريد التواصل مع دعم Omar Browse')">
+      تواصل عبر واتساب
+    </button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const OWNER_PIN = "1234";
+  const WHATSAPP = "201038185501";
+
+  let engine = "google";
+
+  function toast(message) {
+    const el = document.getElementById("toast");
+    el.textContent = message;
+    el.classList.add("show");
+
+    setTimeout(() => {
+      el.classList.remove("show");
+    }, 2500);
+  }
+
+  function go(page) {
+    document.querySelectorAll(".page").forEach(p => {
+      p.classList.remove("active");
+    });
+
+    document.getElementById(page).classList.add("active");
+
+    document.getElementById("sidebar").classList.remove("open");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+  }
+
+  function homeSearch() {
+    const q = document.getElementById("homeSearch").value.trim();
+
+    if (!q) {
+      toast("اكتب حاجة الأول يا عبقري");
+      return;
+    }
+
+    document.getElementById("searchInput").value = q;
+    go("search");
+  }
+
+  function setEngine(name, button) {
+    engine = name;
+
+    document.querySelectorAll(".engine").forEach(x => {
+      x.classList.remove("active");
+    });
+
+    button.classList.add("active");
+  }
+
+  function searchWeb() {
+    const q = document.getElementById("searchInput").value.trim();
+
+    if (!q) {
+      toast("اكتب كلمة للبحث");
+      return;
+    }
+
+    const urls = {
+      google:
+        "https://www.google.com/search?q=",
+
+      bing:
+        "https://www.bing.com/search?q=",
+
+      youtube:
+        "https://www.youtube.com/results?search_query=",
+
+      duck:
+        "https://duckduckgo.com/?q="
+    };
+
+    window.open(
+      urls[engine] + encodeURIComponent(q),
+      "_blank"
+    );
+  }
+
+  function sendChat() {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    const chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+      <div class="message user-message">
+        ${escapeHTML(text)}
+      </div>
+    `;
+
+    input.value = "";
+
+    setTimeout(() => {
+      chat.innerHTML += `
+        <div class="message ai-message">
+          وضع المعاينة شغال حالياً. لربط Omar AI بذكاء اصطناعي حقيقي، اربطه بواجهة API من خلال Backend.
+        </div>
+      `;
+
+      chat.scrollTop = chat.scrollHeight;
+    }, 500);
+  }
+
+  function addApp() {
+    const name = document.getElementById("appName").value.trim();
+    const desc = document.getElementById("appDesc").value.trim();
+    const url = document.getElementById("appUrl").value.trim();
+
+    if (!name || !url) {
+      toast("اكتب اسم ورابط التطبيق");
+      return;
+    }
+
+    const apps =
+      JSON.parse(localStorage.getItem("omarApps") || "[]");
+
+    apps.unshift({
+      id: Date.now(),
+      name,
+      desc,
+      url
+    });
+
+    localStorage.setItem(
+      "omarApps",
+      JSON.stringify(apps)
+    );
+
+    document.getElementById("appName").value = "";
+    document.getElementById("appDesc").value = "";
+    document.getElementById("appUrl").value = "";
+
+    renderApps();
+    toast("تمت إضافة التطبيق");
+  }
+
+  function renderApps() {
+    const list = document.getElementById("appsList");
+
+    const apps =
+      JSON.parse(localStorage.getItem("omarApps") || "[]");
+
+    if (!apps.length) {
+      list.innerHTML = `
+        <div class="panel">
+          لا توجد تطبيقات حالياً.
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = apps.map(app => `
+      <div class="app-item">
+        <h3>🎮 ${escapeHTML(app.name)}</h3>
+        <p class="muted">${escapeHTML(app.desc || "")}</p>
+
+        <div class="actions">
+          <button class="primary"
+            onclick="window.open('${safeURL(app.url)}','_blank')">
+            تحميل
+          </button>
+
+          <button class="secondary owner"
+            onclick="deleteApp(${app.id})">
+            حذف
+          </button>
+        </div>
+      </div>
+    `).join("");
+
+    updateOwnerVisibility();
+  }
+
+  function deleteApp(id) {
+    let apps =
+      JSON.parse(localStorage.getItem("omarApps") || "[]");
+
+    apps = apps.filter(app => app.id !== id);
+
+    localStorage.setItem(
+      "omarApps",
+      JSON.stringify(apps)
+    );
+
+    renderApps();
+    toast("تم حذف التطبيق");
+  }
+
+  function addPost() {
+    const title =
+      document.getElementById("postTitle").value.trim();
+
+    const text =
+      document.getElementById("postText").value.trim();
+
+    if (!title || !text) {
+      toast("اكتب عنوان ومحتوى المنشور");
+      return;
+    }
+
+    const posts =
+      JSON.parse(localStorage.getItem("omarPosts") || "[]");
+
+    posts.unshift({
+      id: Date.now(),
+      title,
+      text,
+      date: new Date().toLocaleDateString("ar-EG")
+    });
+
+    localStorage.setItem(
+      "omarPosts",
+      JSON.stringify(posts)
+    );
+
+    document.getElementById("postTitle").value = "";
+    document.getElementById("postText").value = "";
+
+    renderPosts();
+    toast("تم نشر المنشور");
+  }
+
+  function renderPosts() {
+    const list =
+      document.getElementById("postsList");
+
+    let posts =
+      JSON.parse(localStorage.getItem("omarPosts") || "[]");
+
+    if (!posts.length) {
+      posts = [
+        {
+          id: 1,
+          title: "أهلاً بكم في Omar Browse 🚀",
+          text: "دي أول نسخة تجريبية من الموقع.",
+          date: "اليوم"
+        },
+        {
+          id: 2,
+          title: "تحديث جديد",
+          text: "تم تطوير واجهة الموبايل وإضافة قسم المنشورات.",
+          date: "اليوم"
+        }
+      ];
+    }
+
+    list.innerHTML = posts.map(post => `
+      <div class="post">
+        <h3>${escapeHTML(post.title)}</h3>
+        <p>${escapeHTML(post.text)}</p>
+        <small class="muted">${escapeHTML(post.date)}</small>
+
+        <div class="actions owner">
+          <button class="secondary"
+            onclick="deletePost(${post.id})">
+            حذف
+          </button>
+        </div>
+      </div>
+    `).join("");
+
+    updateOwnerVisibility();
+  }
+
+  function deletePost(id) {
+    let posts =
+      JSON.parse(localStorage.getItem("omarPosts") || "[]");
+
+    posts = posts.filter(post => post.id !== id);
+
+    localStorage.setItem(
+      "omarPosts",
+      JSON.stringify(posts)
+    );
+
+    renderPosts();
+    toast("تم حذف المنشور");
+  }
+
+  function addSuggestion() {
+    const name =
+      document.getElementById("suggestionName").value.trim();
+
+    const text =
+      document.getElementById("suggestionText").value.trim();
+
+    if (!name || !text) {
+      toast("اكتب اسمك والاقتراح");
+      return;
+    }
+
+    const suggestions =
+      JSON.parse(
+        localStorage.getItem("omarSuggestions") || "[]"
+      );
+
+    suggestions.unshift({
+      id: Date.now(),
+      name,
+      text,
+      date: new Date().toLocaleDateString("ar-EG")
+    });
+
+    localStorage.setItem(
+      "omarSuggestions",
+      JSON.stringify(suggestions)
+    );
+
+    document.getElementById("suggestionName").value = "";
+    document.getElementById("suggestionText").value = "";
+
+    renderSuggestions();
+
+    openWhatsApp(
+      `اقتراح جديد من ${name}: ${text}`
+    );
+
+    toast("تم حفظ الاقتراح");
+  }
+
+  function renderSuggestions() {
+    const list =
+      document.getElementById("suggestionsList");
+
+    const suggestions =
+      JSON.parse(
+        localStorage.getItem("omarSuggestions") || "[]"
+      );
+
+    if (!suggestions.length) {
+      list.innerHTML = `
+        <div class="panel">
+          لا توجد اقتراحات حتى الآن.
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = suggestions.map(s => `
+      <div class="suggestion">
+        <b>${escapeHTML(s.name)}</b>
+        <p>${escapeHTML(s.text)}</p>
+        <small class="muted">${escapeHTML(s.date)}</small>
+      </div>
+    `).join("");
+  }
+
+  function subscribe(plan, price) {
+    const message =
+      `مرحباً، أريد الاشتراك في الخطة ${plan} بسعر ${price} جنيه شهرياً عبر Vodafone Cash.`;
+
+    openWhatsApp(message);
+  }
+
+  function openWhatsApp(message) {
+    const url =
+      `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+  }
+
+  function updateOwnerVisibility() {
+    const isOwner =
+      new URLSearchParams(location.search).get("pin")
+      === OWNER_PIN;
+
+    document.querySelectorAll(".owner").forEach(el => {
+      if (isOwner) {
+        el.classList.add("show");
+      } else {
+        el.classList.remove("show");
+      }
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function safeURL(url) {
+    if (
+      url.startsWith("https://") ||
+      url.startsWith("http://")
+    ) {
+      return url.replaceAll("'", "%27");
+    }
+
+    return "#";
+  }
+
+  window.addEventListener("load", () => {
+    renderApps();
+    renderPosts();
+    renderSuggestions();
+    updateOwnerVisibility();
+
+    setTimeout(() => {
+      document.getElementById("splash")
+        .classList.add("hide");
+    }, 1000);
+  });
+</script>
+
+</body>
+  </html>
